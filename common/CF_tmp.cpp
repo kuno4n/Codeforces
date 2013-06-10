@@ -32,6 +32,8 @@ using namespace std;
 #define ALL(v) (v).begin(), (v).end()
 #define FIT(it,v) for (__typeof((v).begin()) it = (v).begin(); it != (v).end(); it++)
 #define OUT(A) cout << #A << " = "<< (A) << endl
+template<class T> void chmin(T &t, T f) { if (t > f) t = f; } 
+template<class T> void chmax(T &t, T f) { if (t < f) t = f; } 
 
 #define present(c, e) ((c).find((e)) != (c).end())
 #define cpresent(c, e) (find(all(c), (e)) != (c).end())
