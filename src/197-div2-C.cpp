@@ -39,45 +39,47 @@ template<class T> void chmax(T &t, T f) { if (t < f) t = f; }
 #define present(c, e) ((c).find((e)) != (c).end())
 #define cpresent(c, e) (find(all(c), (e)) != (c).end())
 
-int n, m;
 
-    int tab[1<<18];
-    
-    // a番目の値をxに変える。　呼び出すときは update(a, x, 0, 0, n);
-    void update(int a, int x, int node, int left, int right, int depth){
-        if(a < left || right <= a) return;
-        if(depth == n){ //if(left+1 == right) {
-            tab[node] = x;
-            return;
-        }
-        int m = (left+right)/2;
-        int n1 = node*2 + 1;
-        int n2 = node*2 + 2;
-        update(a, x, n1, left, m, depth+1);
-        update(a, x, n2, m, right, depth+1);
-        tab[node] = ((n-depth)&1) ? (tab[n1]|tab[n2]) : (tab[n1]^tab[n2]);
-    }
-
+int dp[1000][11][11]; //dp[i][j][k] : i番目にjを使って、差がkであるときの、i-1番目の番号
+bool use[11];
+int m;
 
 void init() {
 }
 
 void input() {
-    cin >> n >> m;
-    MSET(tab, 0);
-    REP(i, (1<<n)){
-		int x; cin >> x;
-		update(i, x, 0, 0, (1<<n), 0);
-	}
+	string s; cin >> s;
+	REP(i, SZ(s)) use[i+1] = (s[i] == '1');
+	cin >> m;
 }
 
 void solve() {
-	REP(_, m){
-		int a, x;
-		cin >> a >> x; a--;
-		update(a, x, 0, 0, (1<<n), 0);
-		cout << tab[0] << endl;
+	MSET(dp, -1);
+	for(int i = 1; i <= 10; i++) if(use[i]) dp[0][i][i] = 0;
+	
+	for(int i = 0; i < m-1; i++) for(int j = 1; j <= 10; j++) for(int k = 1; k <= 9; k++){
+		if(dp[i][j][k] == -1) continue;
+		for(int nxt = 1; nxt <= 10; nxt++) if(use[nxt] && j != nxt && k < nxt) dp[i+1][nxt][nxt-k] = j;
 	}
+	
+	VI res;
+	int prvj = 0, prvk = 0;
+	for(int j = 1; j <= 10; j++) for(int k = 1; k <= 10; k++) if(dp[m-1][j][k] >= 0) prvj = j, prvk = k;
+	if(prvj == 0){
+		cout << "NO" << endl;
+		return;
+	}
+	
+	cout << "YES" << endl;
+	for(int i = m-1; prvj != 0; i--){
+		res.PB(prvj);
+		int tmpj, tmpk;
+		tmpj = dp[i][prvj][prvk], tmpk = prvj-prvk;
+		prvj = tmpj, prvk = tmpk;
+	}
+	reverse(ALL(res));
+	REP(i, m) cout << res[i] << " ";
+	cout << endl;
 }
 
 int main() {
