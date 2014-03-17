@@ -32,6 +32,7 @@ using namespace std;
 #define ALL(v) (v).begin(), (v).end()
 #define FIT(it,v) for (__typeof((v).begin()) it = (v).begin(); it != (v).end(); it++)
 #define OUT(A) cout << #A << " = "<< (A) << endl
+#define OUT2(A, B) cout << "(" << #A << ", " << #B << ") = (" << (A) << ", "<< (B) << ")" << endl
 template<class T> void chmin(T &t, T f) { if (t > f) t = f; } 
 template<class T> void chmax(T &t, T f) { if (t < f) t = f; } 
 
